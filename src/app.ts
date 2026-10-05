@@ -10,6 +10,8 @@ import gearpublicRoutes from "./module/gear/gear.public.route.js";
 
 import categoryRoutes from "./module/category/category.route.js";
 
+import rentalRoutes from "./module/rentalorder/rentalorder.route.js";
+
 const app: Application = express();
 
 
@@ -66,6 +68,8 @@ app.use("/api/provider", gearRoutes);
 app.use("/api", gearpublicRoutes);
 
 app.use("/api", categoryRoutes);
+
+app.use("/api", rentalRoutes);
 
 
 
