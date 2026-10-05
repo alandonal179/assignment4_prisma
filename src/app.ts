@@ -8,6 +8,8 @@ import userRoutes from "./module/user/user.route.js";
 import gearRoutes from "./module/gear/gear.route.js";
 import gearpublicRoutes from "./module/gear/gear.public.route.js";
 
+import categoryRoutes from "./module/category/category.route.js";
+
 const app: Application = express();
 
 
@@ -62,6 +64,10 @@ app.use("/api/auth", userRoutes);
 app.use("/api/provider", gearRoutes);
 
 app.use("/api", gearpublicRoutes);
+
+app.use("/api", categoryRoutes);
+
+
 
 
 
