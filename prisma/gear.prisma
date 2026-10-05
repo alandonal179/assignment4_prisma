@@ -1,0 +1,12 @@
+model GearItem {
+    id           String   @id @default(uuid())
+    name         String   @db.VarChar(255)
+    description  String
+    brand        String
+    pricePerday  Int
+    stock        Int
+    availability Boolean  @default(true)
+    providerId   String
+    createdAt    DateTime @default(now())
+    updatedAt    DateTime @updatedAt
+}
