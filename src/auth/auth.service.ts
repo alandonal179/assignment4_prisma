@@ -1,7 +1,9 @@
 
-import { prisma } from "../lib/prisma.ts";
+import { prisma } from "../lib/prisma";
 import bcrypt from "bcryptjs"
 import jwt from "jsonwebtoken";
+import type { SignOptions } from "jsonwebtoken";
+
 
 interface ILoginPayload {
     email: string;
@@ -42,7 +44,7 @@ const handlelogin = async (payload: ILoginPayload) => {
 
    const accessToken = jwt.sign(
     jwtpayload,
-    process.env.ACCESS_SECRET,
+    process.env.ACCESS_SECRET as string,
     {
         expiresIn: process.env.ACCESS_EXPIRES_IN,
     } as SignOptions
@@ -52,7 +54,7 @@ const handlelogin = async (payload: ILoginPayload) => {
 
    const refreshToken = jwt.sign(
     jwtpayload,
-    process.env.REFRESH_SECRET,
+    process.env.REFRESH_SECRET as string,
     {
         expiresIn: process.env.REFRESH_EXPIRES_IN,
     } as SignOptions

@@ -6,6 +6,7 @@ import { defineConfig } from "prisma/config";
 import authRoutes from "./auth/auth.route.js";
 import userRoutes from "./module/user/user.route.js";
 import gearRoutes from "./module/gear/gear.route.js";
+import gearpublicRoutes from "./module/gear/gear.public.route.js";
 
 const app: Application = express();
 
@@ -59,6 +60,8 @@ app.use("/api/auth", authRoutes);
 app.use("/api/auth", userRoutes);
 
 app.use("/api/provider", gearRoutes);
+
+app.use("/api", gearpublicRoutes);
 
 
 

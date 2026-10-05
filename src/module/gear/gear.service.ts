@@ -10,6 +10,15 @@ interface GearPayload {
     providerId: string;
 }
 
+
+const getgearfromdb=async()=>{
+
+    const gears = await prisma.gearItem.findMany();
+
+    return gears;
+
+};
+
 const creategeartodb = async (payload: GearPayload) => {
     const {
         name,
@@ -93,8 +102,20 @@ const deletegeartodb = async (
     return deleteGear;
 };
 
+const getSinglegearfromdb = async (id: string) => {
+    const singlegearfromdatabase = await prisma.gearItem.findUnique({
+        where: {
+            id
+        }
+    });
+
+    return singlegearfromdatabase;
+};
+
 export const gearservice = {
     creategeartodb,
     updategeartodb,
-    deletegeartodb
+    deletegeartodb,
+    getgearfromdb,
+    getSinglegearfromdb
 };

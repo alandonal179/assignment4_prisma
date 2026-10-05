@@ -1,6 +1,9 @@
 import {gearservice} from "./gear.service.js";
 import type { Request, Response } from "express";
 
+
+
+
 const creategear=async(req:Request,res:Response)=>{
      
     const payload = {
@@ -57,8 +60,48 @@ const deletegear = async(req:Request,res:Response)=>{
 });
 }
 
+const getgear = async(req:Request,res:Response)=>{
+    const resultofgear = await gearservice.getgearfromdb();
+
+    res.status(200).json({
+    success: true,
+    statusCode: 200,
+    message: "Gears retrieved successfully",
+    data:resultofgear,
+
+});
+}
+
+const getSinglegear = async(req:Request,res:Response)=>{
+    const {id} = req.params;
+
+         if (!id || Array.isArray(id)) {
+        throw new Error("Invalid gear id");
+    }
+
+    const resultofsinglegear = await gearservice.getSinglegearfromdb(id);
+    
+     res.status(200).json({
+    success: true,
+    statusCode: 200,
+    message: "single gear retrieved successfully",
+    data:resultofsinglegear,
+
+});
+}
+
+
+
+
 export const gearcontroller={
     creategear,
     updategear,
-    deletegear
+    deletegear,
+    getgear,
+    getSinglegear,
+    
+
+
+    
+    
 }
