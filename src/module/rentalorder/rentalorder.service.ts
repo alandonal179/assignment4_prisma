@@ -2,7 +2,7 @@ import { prisma } from "../../lib/prisma";
 
 
 const createrentalordertodb=async(payload:any)=>{
-    const {userId, gearId, startDate, endDate, quantity, totalPrice}= payload;
+    const {userId, gearId, startDate, endDate}= payload;
 
     const findgear = await prisma.gearItem.findUnique({
         where:{
@@ -17,13 +17,21 @@ const createrentalordertodb=async(payload:any)=>{
         throw new Error("gear is not available now");
     }
 
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+
+    const rentalDays =
+        (end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24);
+
+    const totalPrice = rentalDays * findgear.pricePerday;
+
     const newRentalOrder = await prisma.rentalOrder.create({
         data:{
             userId,
             gearId,
             startDate,
             endDate,
-            quantity,
+           
             totalPrice,
             
         }
