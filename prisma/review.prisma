@@ -1,0 +1,7 @@
+model Review {
+  id      String @id @default(uuid())
+  userId  String
+  gearId  String
+  rating  Int
+  comment String
+}

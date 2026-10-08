@@ -12,6 +12,12 @@ import categoryRoutes from "./module/category/category.route.js";
 
 import rentalRoutes from "./module/rentalorder/rentalorder.route.js";
 
+import paymentRoutes from "./module/payment/payment.route.js";
+
+import adminRoutes from "./module/admin/admin.route";
+
+import reviewRoutes from "./module/review/review.route";
+
 const app: Application = express();
 
 
@@ -70,6 +76,14 @@ app.use("/api", gearpublicRoutes);
 app.use("/api", categoryRoutes);
 
 app.use("/api", rentalRoutes);
+
+app.use("/api/payments",paymentRoutes);
+
+app.use("/api/admin", adminRoutes);
+
+app.use("/api",reviewRoutes);
+
+
 
 
 

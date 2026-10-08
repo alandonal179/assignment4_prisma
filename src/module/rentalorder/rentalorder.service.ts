@@ -41,6 +41,30 @@ const createrentalordertodb=async(payload:any)=>{
     
 }
 
+const getRentalorderfromdbbyuser=async(id:string)=>{
+
+    const rentalorderbyuser = await prisma.rentalOrder.findMany({
+        where:{
+            userId:id,
+        }
+    })
+
+    return rentalorderbyuser;
+
+}
+
+const getRentalOrderdetailsbyId=async(id:string)=>{
+    const singlerentalorderdetails = await prisma.rentalOrder.findUniqueOrThrow({
+        where:{
+            id:id,
+        }
+    })
+
+    return singlerentalorderdetails;
+}
+
 export const rentalOrderService={
-    createrentalordertodb
+    createrentalordertodb,
+    getRentalorderfromdbbyuser,
+    getRentalOrderdetailsbyId,
 }

@@ -21,6 +21,35 @@ const createrentalorder=async(req:Request,res:Response)=>{
 });
 }
 
+const getRentalorder=async(req:Request,res:Response)=>{
+    const userId = req.user.id;
+
+    const rentalresult = await rentalOrderService.getRentalorderfromdbbyuser(userId);
+
+    res.status(200).json({
+    success: true,
+    message: "Data fetched successfully",
+    data: rentalresult,
+});
+}
+
+const getSingleRentalOrderdetails=async(req:Request,res:Response)=>{
+
+    const id = req.params.id;
+
+    const singlerentalorderdetails = await rentalOrderService.getRentalOrderdetailsbyId(id);
+
+
+        res.status(200).json({
+    success: true,
+    message: "Data fetched successfully",
+    data: singlerentalorderdetails ,
+});
+
+}
+
 export const rentalController={
     createrentalorder,
+    getRentalorder,
+    getSingleRentalOrderdetails,
 }

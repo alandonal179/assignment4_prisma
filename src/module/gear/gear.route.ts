@@ -5,11 +5,19 @@ import { Role } from "../../../generated/prisma/enums";
 
 const router = Router();
 
-router.get("/gear",gearcontroller.getgear);
+
 
 router.post("/gear",auth(Role.Provider),gearcontroller.creategear);
 
 router.put("/gear/:id",auth(Role.Provider),gearcontroller.updategear);
+
+router.get("/orders", auth(Role.Provider),gearcontroller.getIncomingOrders);
+
+router.patch(
+    "/orders/:id",
+    auth(Role.Provider),
+    gearcontroller.changeOrderStatus
+);
 
 router.delete("/gear/:id",auth(Role.Provider),gearcontroller.deletegear);
 

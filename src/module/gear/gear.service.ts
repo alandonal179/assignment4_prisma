@@ -1,22 +1,28 @@
+import type { RentalStatus } from "../../../generated/prisma/enums";
 import { prisma } from "../../lib/prisma";
 
 interface GearPayload {
     name: string;
     description: string;
     brand: string;
-    priceperday: number;
+    pricePerday: number;
     stock: number;
-    avialability: boolean;
+    availability: boolean;
     providerId: string;
 }
 
 
-const getgearfromdb=async()=>{
+const getgearfromdb = async (filters: any) => {
+  const { category, brand, minPrice, maxPrice } = filters;
 
-    const gears = await prisma.gearItem.findMany();
-
-    return gears;
-
+  return await prisma.gearItem.findMany({
+    where: {
+      ...(category && { category }),
+      ...(brand && { brand }),
+      ...(minPrice && { price: { gte: Number(minPrice) } }),
+      ...(maxPrice && { price: { lte: Number(maxPrice) } }),
+    },
+  });
 };
 
 const creategeartodb = async (payload: GearPayload) => {
@@ -24,9 +30,9 @@ const creategeartodb = async (payload: GearPayload) => {
         name,
         description,
         brand,
-        priceperday,
+        pricePerday,
         stock,
-        avialability,
+       availability,
         providerId
     } = payload;
 
@@ -35,9 +41,9 @@ const creategeartodb = async (payload: GearPayload) => {
             name,
             description,
             brand,
-            pricePerday: priceperday,
+            pricePerday: pricePerday,
             stock,
-            availability: avialability,
+            availability: availability,
             providerId
         }
     });
@@ -69,9 +75,9 @@ const updategeartodb = async (
             name: payload.name,
             description: payload.description,
             brand: payload.brand,
-            pricePerday: payload.priceperday,
+            pricePerday: payload.pricePerday,
             stock: payload.stock,
-            availability: payload.avialability
+            availability: payload.availability
         }
     });
 
@@ -106,10 +112,60 @@ const getSinglegearfromdb = async (id: string) => {
     const singlegearfromdatabase = await prisma.gearItem.findUnique({
         where: {
             id
+        },
+        include: {
+            provider: {
+                select: {
+                    name: true,
+                    email: true
+                }
+            }
         }
     });
 
     return singlegearfromdatabase;
+};
+
+const getProviderOrders = async (providerId: string) => {
+    const orders = await prisma.rentalOrder.findMany({
+        where: {
+            gear: {
+                providerId
+            }
+        }
+    });
+
+    return orders;
+};
+
+const updateRentalOrderStatus = async (
+    id: string,
+    providerId: string,
+    status: RentalStatus
+) => {
+    const order = await prisma.rentalOrder.findFirst({
+        where: {
+            id,
+            gear: {
+                providerId
+            }
+        }
+    });
+
+    if (!order) {
+        throw new Error("Order not found or you are not authorized");
+    }
+
+    const updatedOrder = await prisma.rentalOrder.update({
+        where: {
+            id
+        },
+        data: {
+            status
+        }
+    });
+
+    return updatedOrder;
 };
 
 export const gearservice = {
@@ -117,5 +173,7 @@ export const gearservice = {
     updategeartodb,
     deletegeartodb,
     getgearfromdb,
-    getSinglegearfromdb
+    getSinglegearfromdb,
+    getProviderOrders,
+    updateRentalOrderStatus,
 };

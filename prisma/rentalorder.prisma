@@ -18,4 +18,6 @@ model RentalOrder {
 
   user User     @relation(fields: [userId], references: [id])
   gear GearItem @relation(fields: [gearId], references: [id])
+
+  payments Payment[]
 }

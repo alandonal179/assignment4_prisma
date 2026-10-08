@@ -60,17 +60,14 @@ const deletegear = async(req:Request,res:Response)=>{
 });
 }
 
-const getgear = async(req:Request,res:Response)=>{
-    const resultofgear = await gearservice.getgearfromdb();
+const getAllGear = async (req: Request, res: Response) => {
+  const result = await gearservice.getgearfromdb(req.query);
 
-    res.status(200).json({
+  res.status(200).json({
     success: true,
-    statusCode: 200,
-    message: "Gears retrieved successfully",
-    data:resultofgear,
-
-});
-}
+    data: result,
+  });
+};
 
 const getSinglegear = async(req:Request,res:Response)=>{
     const {id} = req.params;
@@ -90,6 +87,37 @@ const getSinglegear = async(req:Request,res:Response)=>{
 });
 }
 
+const getIncomingOrders = async (req: Request, res: Response) => {
+    const providerId = req.user.id;
+
+    const result = await gearservice.getProviderOrders(providerId);
+
+    res.status(200).json({
+        success: true,
+        message: "Incoming orders fetched successfully",
+        data: result
+    });
+};
+
+
+const changeOrderStatus = async (req: Request, res: Response) => {
+    const id = req.params.id as string;
+    const providerId = req.user.id;
+    const { status } = req.body;
+
+    const result = await gearservice.updateRentalOrderStatus(
+        id,
+        providerId,
+        status
+    );
+
+    res.status(200).json({
+        success: true,
+        message: "Rental order status updated successfully",
+        data: result
+    });
+};
+
 
 
 
@@ -97,11 +125,10 @@ export const gearcontroller={
     creategear,
     updategear,
     deletegear,
-    getgear,
+    getAllGear,
     getSinglegear,
-    
-
-
-    
+    getIncomingOrders,
+    changeOrderStatus,
+      
     
 }
