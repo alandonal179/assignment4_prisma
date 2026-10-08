@@ -2,32 +2,43 @@ import { prisma } from "../../lib/prisma";
 import bcrypt from "bcryptjs";
 
 
-const registrationhandle=async(payload:any)=>{
 
-    const {name,email,password,role} = payload;
+const registrationhandle = async (payload: any) => {
+
+    const { name, email, password, role } = payload;
 
     const userExist = await prisma.user.findUnique({
-        where:{
+        where: {
             email: email
         }
     });
 
-    if(userExist){
+    if (userExist) {
         throw new Error("User with this email already exists");
     }
 
-    const hashedpass = await bcrypt.hash(password,Number(process.env.BCRYPT_SALT_ROUNDS));
+    if (role === "Admin") {
+        throw new Error("Admin registration is not allowed");
+    }
+
+    const hashedpass = await bcrypt.hash(
+        password,
+        Number(process.env.BCRYPT_SALT_ROUNDS)
+    );
 
     const newUser = await prisma.user.create({
-        data:{
+        data: {
             name: name,
             email: email,
             password: hashedpass,
-            role:role,
+            role: role || "Customer"
         }
-    })
-  
-}
+    });
+
+    return newUser;
+};
+
+
 
 const getprofilefromdb =async(id:string)=>{
 
