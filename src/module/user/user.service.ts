@@ -4,7 +4,7 @@ import bcrypt from "bcryptjs";
 
 const registrationhandle=async(payload:any)=>{
 
-    const {name,email,password} = payload;
+    const {name,email,password,role} = payload;
 
     const userExist = await prisma.user.findUnique({
         where:{
@@ -23,6 +23,7 @@ const registrationhandle=async(payload:any)=>{
             name: name,
             email: email,
             password: hashedpass,
+            role:role,
         }
     })
   
